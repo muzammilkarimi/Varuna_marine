@@ -9,7 +9,7 @@ describe('ComputeCBUseCase', () => {
     // Route GHG = 88.0
     // Fuel Consumption = 4800
     // Energy = 4800 * 41000 = 196800000
-    // Expected CB = (89.3368 - 88.0) * 196800000 = 263080640
+    // Expected CB = (89.3368 - 88.0) * 196800000 = 263082240
     
     const mockRoute: Route = {
       routeId: 'R002',
@@ -41,7 +41,7 @@ describe('ComputeCBUseCase', () => {
     const result = await useCase.execute('R002', 2024);
 
     expect(mockRouteRepo.findByRouteId).toHaveBeenCalledWith('R002');
-    expect(result.cbGco2eq).toBe(263080640);
+    expect(result.cbGco2eq).toBe(263082240);
   });
 
   it('should throw an error if the route tracking is not found', async () => {

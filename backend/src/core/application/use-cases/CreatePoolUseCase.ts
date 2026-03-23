@@ -25,15 +25,25 @@ export class CreatePoolUseCase {
     
     for (const member of membersData) {
       if (member.cbAfter < 0) {
-        const deficit = Math.abs(member.cbAfter);
-        const surplusProvider = membersData.find(m => m.cbAfter > 0);
-        if (surplusProvider && surplusProvider.cbAfter >= deficit) {
-          surplusProvider.cbAfter -= deficit;
-          member.cbAfter = 0;
-        } else if (surplusProvider) {
-          const available = surplusProvider.cbAfter;
-          surplusProvider.cbAfter = 0;
-          member.cbAfter += available;
+        let deficit = Math.abs(member.cbAfter);
+        let surplusProvider = membersData.find(m => m.cbAfter > 0);
+        
+        // Loop continuously to exhaust all available surplus sources if needed
+        while (deficit > 0 && surplusProvider) {
+          if (surplusProvider.cbAfter >= deficit) {
+            surplusProvider.cbAfter -= deficit;
+            member.cbAfter = 0;
+            deficit = 0;
+          } else {
+            const available = surplusProvider.cbAfter;
+            surplusProvider.cbAfter = 0;
+            member.cbAfter += available;
+            deficit -= available;
+          }
+          // Fetch the next available surplus provider if current deficit is still > 0
+          if (deficit > 0) {
+            surplusProvider = membersData.find(m => m.cbAfter > 0);
+          }
         }
       }
     }

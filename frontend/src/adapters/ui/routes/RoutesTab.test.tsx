@@ -34,19 +34,20 @@ describe('RoutesTab UI Component', () => {
     render(<RoutesTab />);
 
     // Check Headers
-    expect(screen.getByText('Vessel Routes')).toBeInTheDocument();
+    expect(screen.getByText('🚢 Vessel Routes')).toBeInTheDocument();
     
     // Wait for the mock API data to populate
     await waitFor(() => {
       expect(screen.getByText('R001')).toBeInTheDocument();
       expect(screen.getByText('Container')).toBeInTheDocument();
-      expect(screen.getByText('✅ Active')).toBeInTheDocument();
+      expect(screen.getByText('✅ Baseline')).toBeInTheDocument();
     });
   });
 
   it('should render the categorical filters correctly', () => {
     render(<RoutesTab />);
-    expect(screen.getByPlaceholderText('Filter Vessel Type')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Filter Year')).toBeInTheDocument();
+    // Select dropdowns are now used instead of placeholder inputs
+    expect(screen.getByText('All Vessel Types')).toBeInTheDocument();
+    expect(screen.getByText('All Years')).toBeInTheDocument();
   });
 });

@@ -56,4 +56,10 @@ export class PrismaComplianceRepository implements IComplianceRepository, IBankR
       data: { shipId, year, amountGco2eq: -amount },
     });
   }
+
+  async findBankEntries(shipId: string, year: number): Promise<any[]> {
+    return this.prisma.bankEntry.findMany({
+      where: { shipId, year }
+    });
+  }
 }

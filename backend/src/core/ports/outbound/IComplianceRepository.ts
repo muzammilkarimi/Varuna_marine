@@ -10,4 +10,5 @@ export interface IBankRepository {
   bankSurplus(shipId: string, year: number, amountGco2eq: number): Promise<void>;
   getTotalBanked(shipId: string, year: number): Promise<number>;
   applyBanked(shipId: string, year: number, amount: number): Promise<void>;
+  findBankEntries(shipId: string, year: number): Promise<any[]>;
 }

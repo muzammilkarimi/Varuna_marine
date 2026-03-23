@@ -40,5 +40,20 @@ export const bankingRouter = (prisma: PrismaClient) => {
     }
   });
 
+  // GET /banking/records?shipId=XXXX&year=YYYY
+  router.get('/records', async (req, res) => {
+    try {
+      const { shipId, year } = req.query;
+      if (!shipId || !year) {
+        return res.status(400).json({ error: 'shipId and year are required' });
+      }
+      
+      const records = await complianceRepo.findBankEntries(shipId as string, Number(year));
+      res.json(records);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   return router;
 };
