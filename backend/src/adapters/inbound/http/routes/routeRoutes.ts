@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import type { PrismaClient } from '@prisma/client';
-import { PrismaRouteRepository } from '../../outbound/postgres/repositories/PrismaRouteRepository';
-import { CompareRoutesUseCase } from '../../../core/application/use-cases/CompareRoutesUseCase';
+import { PrismaRouteRepository } from '../../../outbound/postgres/repositories/PrismaRouteRepository';
+import { CompareRoutesUseCase } from '../../../../core/application/use-cases/CompareRoutesUseCase';
 
 export const routeRouter = (prisma: PrismaClient) => {
   const router = Router();
