@@ -1,32 +1,57 @@
-# FuelEU Maritime Compliance Platform
+# 🚢 FuelEU Maritime Compliance Platform
+
+![Dashboard Routes](./screenshots/dashboard_routes.png)
 
 ## Overview
-This Full-Stack system implements the Fuel EU Maritime compliance module using a strict Hexagonal Architecture. It administers Vessel tracking, Baseline Comparison (Target 89.33 gCO2e), Banking modules (Article 20), and Pooling simulations (Article 21).
+A Full-Stack dashboard for tracking **FuelEU Maritime** compliance. Features vessel tracking, baseline comparisons (Target `89.3368`), Banking adjustments, and Pooling simulators setup.
 
 ---
 
-## Architecture Summary
-The application is bifurcated into a **Vite React Frontend** and an **Express.js Backend**, strictly implementing Clean / Ports & Adapters Architecture.
+## Architecture Summary (Hexagonal Structure)
+The system uses **Ports & Adapters (Hexagonal Architecture)**. Loop setups isolate arithmetic formulas from routers and databases.
 
-### Core Domain Flow
-- **Core (`backend/src/core`)**: Contains Domain Entities (`Route`, `Pool`) and highly isolated Application Use Cases (`ComputeCBUseCase`, `CreatePoolUseCase`). This layer contains zero HTTP or Database dependencies.
-- **Adapters (`backend/src/adapters`)**: 
-  - *Inbound*: Express Routes providing REST API access.
-  - *Outbound*: Prisma Repository implementations speaking to PostgreSQL.
+```mermaid
+graph TD
+    subgraph "Frontend (React)"
+        UI["React Grid & Charts"]
+        Axios["Axios API Clients (Adapters)"]
+    end
+
+    subgraph "Backend (Express)"
+        subgraph "Infrastructure (Adapters)"
+            Express["Express Routes"]
+            Prisma["Prisma ORM"]
+        end
+
+        subgraph "Core Domain Layer"
+            UseCases["Application Use Cases"]
+            Domain["Domain Entities"]
+            Ports["Core Ports (Interfaces)"]
+        end
+    end
+
+    UI --> Axios
+    Axios --> Express
+    Express --> UseCases
+    Prisma --> Ports
+    UseCases --> Ports
+```
+
+- **Domain Core**: No Prisma/Express imports. Pure logic and maths.
+- **Adapters**: Inner logic connected outwards to client clients setup correctly.
 
 ---
 
 ## Setup & Run Instructions
 
 ### 1. Database Configuration
-1. Ensure your local PostgreSQL server is actively running (Port `5432`).
-2. Inside the `backend` directory, create a `.env` file containing your Postgres URL:
+1. Make sure PostgreSQL is running on Port `5432`.
+2. Add a `.env` file in the `backend/` folder:
    ```env
    DATABASE_URL="postgresql://postgres:password@localhost:5432/fueleu?schema=public"
    ```
 
-### 2. Launching the Backend Server
-From the root terminal, run:
+### 2. Run Backend
 ```bash
 cd backend
 npm install
@@ -35,17 +60,57 @@ npx prisma generate
 npm run seed
 npx ts-node src/infrastructure/server/index.ts
 ```
-*(The backend serves API mockups and DB queries on `http://localhost:3001`!)*
 
-### 3. Launching the Frontend Dashboard
-Open a secondary terminal:
+### 3. Run Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-Browse to `http://localhost:5173`. The application features:
-- **Routes Dashboard**: Rendered via Vite + TailwindCSS showcasing vessel baselines and categorical filters.
-- **Compare Tab**: Renders dynamic interactive charts driven by `recharts`.
-- **Banking & Pooling**: Features validated form interactions interacting with backend Mock endpoints verifying compliance limits!
+---
+
+## How to execute tests
+Run the backend isolated Jest verify thresholds:
+```bash
+cd backend
+npm run test
+```
+
+---
+
+## Visual Previews
+
+### 📊 **Vessel Routes Dashboard**
+Comprehensive vessel tracking grids:
+![Vessel Routes](./screenshots/dashboard_routes.png)
+
+### 📈 **Comparison Visualizer**
+Predictive analytics against absolute 2025 thresholds models:
+![Comparison Analytics](./screenshots/dashboard_compare.png)
+
+### 🏦 **Banking Module (Article 20)**
+Balance safety verification modules:
+![Banking Dashboard](./screenshots/dashboard_banking.png)
+
+### 🧬 **Pooling Simulators (Article 21)**
+Iterative allocation balances triggers offsets grids:
+![Pooling allocation](./screenshots/dashboard_pooling.png)
+
+---
+
+## Sample Request & Response
+
+### 📊 **Compliance Calculation**
+**Endpoint**: `GET /api/compliance/:shipId/compute?year=2025`
+
+**Sample Response**:
+```json
+{
+  "shipId": "IMO9876543",
+  "year": 2025,
+  "cbGco2eq": 263082240,
+  "status": "COMPLIANT",
+  "isBanked": false
+}
+```

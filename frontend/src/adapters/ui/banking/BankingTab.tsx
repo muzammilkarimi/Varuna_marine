@@ -138,7 +138,7 @@ export const BankingTab = () => {
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+        <div className="btn-group">
           <button
             className="btn btn-success"
             disabled={!cbInfo || cbValue <= 0 || amount <= 0}
