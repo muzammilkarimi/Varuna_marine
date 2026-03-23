@@ -4,42 +4,47 @@ import { CompareTab } from './adapters/ui/compare/CompareTab';
 import { BankingTab } from './adapters/ui/banking/BankingTab';
 import { PoolingTab } from './adapters/ui/pooling/PoolingTab';
 
+const tabs = [
+  { id: 'routes', label: 'Routes', icon: '🚢' },
+  { id: 'compare', label: 'Compare', icon: '📊' },
+  { id: 'banking', label: 'Banking', icon: '🏦' },
+  { id: 'pooling', label: 'Pooling', icon: '🤝' },
+];
+
 function App() {
   const [activeTab, setActiveTab] = useState('routes');
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-blue-900 text-white p-4 shadow-md">
-        <h1 className="text-2xl font-bold">FuelEU Maritime Dashboard</h1>
-        <nav className="mt-4 flex gap-4">
-          <button 
-            className={`px-3 py-1 rounded ${activeTab === 'routes' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
-            onClick={() => setActiveTab('routes')}>
-            Routes
-          </button>
-          <button 
-            className={`px-3 py-1 rounded ${activeTab === 'compare' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
-            onClick={() => setActiveTab('compare')}>
-            Compare
-          </button>
-          <button 
-            className={`px-3 py-1 rounded ${activeTab === 'banking' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
-            onClick={() => setActiveTab('banking')}>
-            Banking
-          </button>
-          <button 
-            className={`px-3 py-1 rounded ${activeTab === 'pooling' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
-            onClick={() => setActiveTab('pooling')}>
-            Pooling
-          </button>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <header className="dashboard-header">
+        <div className="header-top">
+          <div className="header-logo">⛽</div>
+          <div>
+            <h1 className="header-title">FuelEU Maritime</h1>
+            <p className="header-subtitle">Compliance Dashboard</p>
+          </div>
+        </div>
+        <nav className="tab-nav">
+          {tabs.map(tab => (
+            <button
+              key={tab.id}
+              className={`tab-btn ${activeTab === tab.id ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              <span style={{ marginRight: '0.35rem' }}>{tab.icon}</span>
+              {tab.label}
+            </button>
+          ))}
         </nav>
       </header>
 
-      <main className="flex-1 p-6">
-        {activeTab === 'routes' && <RoutesTab />}
-        {activeTab === 'compare' && <CompareTab />}
-        {activeTab === 'banking' && <BankingTab />}
-        {activeTab === 'pooling' && <PoolingTab />}
+      <main className="main-content">
+        <div className="fade-in" key={activeTab}>
+          {activeTab === 'routes' && <RoutesTab />}
+          {activeTab === 'compare' && <CompareTab />}
+          {activeTab === 'banking' && <BankingTab />}
+          {activeTab === 'pooling' && <PoolingTab />}
+        </div>
       </main>
     </div>
   );

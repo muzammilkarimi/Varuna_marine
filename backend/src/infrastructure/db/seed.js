@@ -27,7 +27,22 @@ function main() {
                 create: r,
             });
         }
-        console.log('Database seeded with standard KPI routes!');
+        // Seed ShipCompliance data for Banking/Pooling features
+        const complianceData = [
+            { shipId: 'R001', year: 2024, cbGco2eq: -341320000 }, // Deficit (91.0 > 89.3368 target)
+            { shipId: 'R002', year: 2024, cbGco2eq: 263080640 }, // Surplus (88.0 < 89.3368 target)
+            { shipId: 'R003', year: 2024, cbGco2eq: -870336800 }, // Deficit (93.5 > 89.3368 target)
+            { shipId: 'R004', year: 2025, cbGco2eq: -27548480 }, // Small deficit (89.2 ~≈ target)
+            { shipId: 'R005', year: 2025, cbGco2eq: -236070360 }, // Deficit (90.5 > 89.3368 target)
+        ];
+        for (const c of complianceData) {
+            yield prisma.shipCompliance.upsert({
+                where: { shipId_year: { shipId: c.shipId, year: c.year } },
+                update: { cbGco2eq: c.cbGco2eq },
+                create: c,
+            });
+        }
+        console.log('Database seeded with routes and compliance data!');
     });
 }
 main()
