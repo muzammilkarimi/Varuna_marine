@@ -1,6 +1,6 @@
 import type { PrismaClient } from '@prisma/client';
-import type { IPoolRepository } from '../../../ports/outbound/IPoolRepository';
-import type { Pool, PoolMember } from '../../../domain/pool.entity';
+import type { IPoolRepository } from '../../../../core/ports/outbound/IPoolRepository';
+import type { Pool, PoolMember } from '../../../../core/domain/pool.entity';
 
 export class PrismaPoolRepository implements IPoolRepository {
   constructor(private prisma: PrismaClient) {}

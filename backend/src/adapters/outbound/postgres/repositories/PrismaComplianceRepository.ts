@@ -1,6 +1,6 @@
 import type { PrismaClient } from '@prisma/client';
-import type { IComplianceRepository, IBankRepository } from '../../../ports/outbound/IComplianceRepository';
-import type { ShipCompliance } from '../../../domain/compliance.entity';
+import type { IComplianceRepository, IBankRepository } from '../../../../core/ports/outbound/IComplianceRepository';
+import type { ShipCompliance } from '../../../../core/domain/compliance.entity';
 
 export class PrismaComplianceRepository implements IComplianceRepository, IBankRepository {
   constructor(private prisma: PrismaClient) {}
