@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { RoutesTab } from './adapters/ui/routes/RoutesTab';
 import { CompareTab } from './adapters/ui/compare/CompareTab';
+import { BankingTab } from './adapters/ui/banking/BankingTab';
+import { PoolingTab } from './adapters/ui/pooling/PoolingTab';
 
 function App() {
   const [activeTab, setActiveTab] = useState('routes');
@@ -20,12 +22,24 @@ function App() {
             onClick={() => setActiveTab('compare')}>
             Compare
           </button>
+          <button 
+            className={`px-3 py-1 rounded ${activeTab === 'banking' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
+            onClick={() => setActiveTab('banking')}>
+            Banking
+          </button>
+          <button 
+            className={`px-3 py-1 rounded ${activeTab === 'pooling' ? 'bg-blue-700' : 'hover:bg-blue-800'}`}
+            onClick={() => setActiveTab('pooling')}>
+            Pooling
+          </button>
         </nav>
       </header>
 
       <main className="flex-1 p-6">
         {activeTab === 'routes' && <RoutesTab />}
         {activeTab === 'compare' && <CompareTab />}
+        {activeTab === 'banking' && <BankingTab />}
+        {activeTab === 'pooling' && <PoolingTab />}
       </main>
     </div>
   );
