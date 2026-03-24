@@ -52,7 +52,7 @@ graph TD
 1. Make sure PostgreSQL is running on Port `5432`.
 2. Add a `.env` file in the `backend/` folder:
    ```env
-   DATABASE_URL="postgresql://postgres:password@localhost:5432/fueleu?schema=public"
+   DATABASE_URL="postgresql://postgres:xxxxxx@localhost:5432/fueleu?schema=public"
    ```
 
 ### 2. Run Backend
