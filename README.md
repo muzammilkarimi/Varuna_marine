@@ -3,7 +3,11 @@
 ![Dashboard Routes](./screenshots/dashboard_routes.png)
 
 ## Overview
-A Full-Stack dashboard for tracking **FuelEU Maritime** compliance. Features vessel tracking, baseline comparisons (Target `89.3368`), Banking adjustments, and Pooling simulators setup.
+A Full-Stack dashboard for tracking **FuelEU Maritime** compliance. Features:
+- **Dashboard (Routes)**: View and manage vessel tracking grids and baseline metrics.
+- **Comparison Visualizer**: Predictive analytics matching threshold targets accurately.
+- **Banking Module (Article 20)**: Balance adjustments with absolute Banking surpluses allocations.
+- **Pooling Simulator (Article 21)**: Iterative allocation setups securely combining vessel pools.
 
 ---
 
@@ -57,8 +61,8 @@ cd backend
 npm install
 npx prisma db push
 npx prisma generate
-npm run seed
-npx ts-node src/infrastructure/server/index.ts
+npx prisma db seed
+npm run dev
 ```
 
 ### 3. Run Frontend
@@ -99,18 +103,39 @@ Iterative allocation balances triggers offsets grids:
 
 ---
 
-## Sample Request & Response
+## 📖 API Documentation
 
-### 📊 **Compliance Calculation**
-**Endpoint**: `GET /api/compliance/:shipId/compute?year=2025`
+The backend operates on `http://localhost:3001`. 
 
-**Sample Response**:
-```json
-{
-  "shipId": "IMO9876543",
-  "year": 2025,
-  "cbGco2eq": 263082240,
-  "status": "COMPLIANT",
-  "isBanked": false
-}
-```
+### 📊 Vessel Routes (`/routes`)
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/routes` | Fetch all vessel routes. |
+| `POST` | `/routes/:id/baseline` | Set a route as the baseline. |
+| `GET` | `/routes/comparison` | Run predictive comparison analysis. |
+
+### ⚖️ Compliance (`/compliance`)
+| Method | Endpoint | Parameters | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/compliance/cb` | `?year=YYYY&shipId=XXXX` | Compute compliance balance (`cbGco2eq`). |
+| `GET` | `/compliance/adjusted-cb` | `?year=YYYY&shipId=XXXX` | Fetch adjusted balance with banking offsets. |
+
+### 🏦 Banking Module (`/banking`)
+| Method | Endpoint | Body Shape | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/banking/bank` | `{ shipId, year, amount }` | Create surplus banking records. |
+| `POST` | `/banking/apply` | `{ shipId, year, amount }` | Apply banked surplus offsets. |
+| `GET` | `/banking/records`| `?shipId=XXXX&year=YYYY` | Retrieve adjustment history records. |
+
+### 🧬 Pooling Simulator (`/pools`)
+| Method | Endpoint | Body Shape | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/pools` | `{ year, shipIds: [] }` | Form compliance pools combination securely. |
+| `GET` | `/pools` | `?year=YYYY` | Retrieves pools setups grouped by year. |
+
+---
+
+## 🧮 Core Formulas
+*   **Compliance Balance (CB)**: `(Target - Actual) * Energy`
+    *   `Target`: `89.3368` gCO₂e/MJ
+    *   `Energy`: `fuelConsumption * 41000`

@@ -39,9 +39,8 @@ export const BankingTab = () => {
     try {
       await api.post('/banking/bank', { shipId, year, amount });
       setSuccess(`Successfully banked ${amount.toLocaleString()} gCO₂eq`);
-      // Update KPIs
+      // Update KPIs Node
       if (kpis) setKpis({ cb_before: kpis.cb_before, applied: amount, cb_after: kpis.cb_before - amount });
-      fetchCb();
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to bank surplus');
     }
@@ -53,7 +52,6 @@ export const BankingTab = () => {
       await api.post('/banking/apply', { shipId, year, amount });
       setSuccess(`Successfully applied ${amount.toLocaleString()} gCO₂eq banked surplus`);
       if (kpis) setKpis({ cb_before: kpis.cb_before, applied: amount, cb_after: kpis.cb_before + amount });
-      fetchCb();
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to apply banked surplus');
     }
