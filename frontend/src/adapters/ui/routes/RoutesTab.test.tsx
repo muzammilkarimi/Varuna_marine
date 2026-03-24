@@ -39,7 +39,7 @@ describe('RoutesTab UI Component', () => {
     // Wait for the mock API data to populate
     await waitFor(() => {
       expect(screen.getByText('R001')).toBeInTheDocument();
-      expect(screen.getByText('Container')).toBeInTheDocument();
+      expect(screen.getAllByText('Container')[0]).toBeInTheDocument();
       expect(screen.getByText('✅ Baseline')).toBeInTheDocument();
     });
   });
